@@ -3,8 +3,15 @@ from pyexpat import model
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from project_app.models import Trip
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class CreateTripSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Trip
+        fields = ['title','description','pic',]
+        
+        
+class TripUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trip
         fields = ['title','description','pic',]
@@ -12,7 +19,12 @@ class CreateTripSerializer(serializers.ModelSerializer):
 class TripListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trip
-        fields = ['title','pic',]
+        fields = ['title','pic','id']
+        
+class UserProfileSerializer(serializers.Serializer):
+    class Meta:
+        model = User
+        fields = ['username',]
 
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -30,9 +42,11 @@ class UserCreateSerializer(serializers.ModelSerializer):
 class UserLoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)
+    access = serializers.CharField(allow_blank=True, read_only=True)
     def validate(self, data):
         my_username = data.get("username")
         my_password = data.get("password")
+        
 
         try:
             user_obj = User.objects.get(username=my_username)
@@ -41,5 +55,10 @@ class UserLoginSerializer(serializers.Serializer):
 
         if not user_obj.check_password(my_password):
             raise serializers.ValidationError("Incorrect username/password combination!")
+        
+        payload = RefreshToken.for_user(user_obj)
+        token = str(payload.access_token)
+
+        data["access"] = token
 
         return data
