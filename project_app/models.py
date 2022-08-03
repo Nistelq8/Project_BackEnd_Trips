@@ -8,3 +8,5 @@ class Trip(models.Model):
     pic = models.ImageField(upload_to='media/')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="trips")
     id = models.AutoField(primary_key=True)
+    
+    

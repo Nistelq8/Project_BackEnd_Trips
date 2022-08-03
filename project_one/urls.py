@@ -18,15 +18,18 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from project_app import views
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('create/', views.CreateTripView.as_view(), name='create'),
-    path('profile/', views.UserProfileView.as_view(), name='profile'),
+    path('profile/', views.UserProfileView.as_view(), name='profiles'),
+    path("token/refresh/", TokenRefreshView.as_view(), name="token-refresh"),
     path('list/', views.TripListView.as_view(), name='explore'),
     path('register/',views.UserCreateView.as_view(), name='register'),
-    path('login/',views.UserLoginAPIView.as_view(), name='login'),
+    path("login/", TokenObtainPairView.as_view(), name="login"),
     path('update/<int:trip_id>',views.TripUpdateView.as_view(), name='update'),
+    path('delete/<int:trip_id>',views.TripDeleteView.as_view(), name='delete'),
     
     
 ]

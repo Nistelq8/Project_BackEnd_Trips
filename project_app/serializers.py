@@ -21,10 +21,10 @@ class TripListSerializer(serializers.ModelSerializer):
         model = Trip
         fields = ['title','pic','id']
         
-class UserProfileSerializer(serializers.Serializer):
+class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username',]
+        fields = ['username','id']
 
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -32,9 +32,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
         model = User
         fields = ["username", "password"]
     def create(self, validated_data):
-        username = validated_data["username"]
-        password = validated_data["password"]
-        new_user = User(username=username)
+        password = validated_data.pop("password")
+        new_user = User(**validated_data)
         new_user.set_password(password)
         new_user.save()
         return validated_data
@@ -50,6 +49,8 @@ class UserLoginSerializer(serializers.Serializer):
 
         try:
             user_obj = User.objects.get(username=my_username)
+            print(user_obj)
+            print(my_username)
         except User.DoesNotExist:
             raise serializers.ValidationError("This username does not exist")
 
@@ -60,5 +61,5 @@ class UserLoginSerializer(serializers.Serializer):
         token = str(payload.access_token)
 
         data["access"] = token
-
+        print(data["access"])
         return data
