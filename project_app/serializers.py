@@ -1,3 +1,4 @@
+from attr import fields
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from project_app.models import Trip, UserProfile
@@ -22,6 +23,11 @@ class TripListSerializer(serializers.ModelSerializer):
       class Meta:
         model = Trip
         fields = ['title','pic','id','user']
+
+class UsersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username','id',]
         
 class UserProfileSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
@@ -29,7 +35,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
        return obj.user.username
     class Meta:
         model = UserProfile
-        fields = ['user','id']
+        fields = ['user','id',"bio"]
 
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
