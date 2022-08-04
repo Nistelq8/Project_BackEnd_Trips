@@ -1,14 +1,13 @@
-from dataclasses import fields
-from pyexpat import model
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from project_app.models import Trip
+from project_app.models import Trip, UserProfile
 from rest_framework_simplejwt.tokens import RefreshToken
 
 class CreateTripSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
     class Meta:
         model = Trip
-        fields = ['title','description','pic',]
+        fields = ['title','description','pic','owner']
         
         
 class TripUpdateSerializer(serializers.ModelSerializer):
@@ -17,14 +16,20 @@ class TripUpdateSerializer(serializers.ModelSerializer):
         fields = ['title','description','pic',]
 
 class TripListSerializer(serializers.ModelSerializer):
-    class Meta:
+      user = serializers.SerializerMethodField()
+      def get_user(self, obj):
+       return obj.user.username
+      class Meta:
         model = Trip
-        fields = ['title','pic','id']
+        fields = ['title','pic','id','user']
         
 class UserProfileSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+    def get_user(self, obj):
+       return obj.user.username
     class Meta:
-        model = User
-        fields = ['username','id']
+        model = UserProfile
+        fields = ['user','id']
 
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)

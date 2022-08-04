@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView,DestroyAPIView
-from project_app.models import Trip
-from django.contrib.auth.models import User
+from project_app.models import Trip, UserProfile
+# from django.contrib.auth.models import User
 from .serializers import CreateTripSerializer, TripListSerializer, TripUpdateSerializer, UserCreateSerializer, UserLoginSerializer, UserProfileSerializer
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.response import Response
@@ -9,6 +9,8 @@ from .permissions import IsAuthor
 
 class CreateTripView(CreateAPIView):
     serializer_class = CreateTripSerializer
+    def perform_create(self, serializer):
+         serializer.save(user=self.request.user)
 
 
 class TripListView(ListAPIView):
@@ -20,6 +22,7 @@ class TripUpdateView(UpdateAPIView):
     serializer_class = TripUpdateSerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'trip_id'
+    permission_classes = [IsAuthor,]
 
     
 class TripDeleteView(DestroyAPIView):
@@ -30,10 +33,8 @@ class TripDeleteView(DestroyAPIView):
     permission_classes = [IsAuthor,]
     
 class UserProfileView(ListAPIView):
-    queryset = User.objects.all()
+    queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
-    lookup_field = 'username'
-    lookup_url_kwarg = 'username_id'
     
 class UserCreateView(CreateAPIView):
     serializer_class = UserCreateSerializer
