@@ -15,12 +15,6 @@ class CreateTripView(CreateAPIView):
 
 class TripListView(ListAPIView):
     queryset = Trip.objects.all()
-    # def get_queryset(Self):
-    #     queryset = Trip.objects.first()
-    #     print(dir(queryset))
-    #     print(queryset.user.username)
-    #     return [queryset]
-        
     serializer_class = TripListSerializer
 
 class TripDetailView(RetrieveAPIView):

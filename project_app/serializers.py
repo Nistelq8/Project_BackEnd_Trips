@@ -1,8 +1,8 @@
+from attr import fields
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from project_app.models import Trip, UserProfile
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.response import Response
 
 class CreateTripSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
@@ -35,7 +35,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
        return obj.user.username
     class Meta:
         model = UserProfile
-        fields = '__all__'
+        fields = ['user','id',"bio"]
 
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
