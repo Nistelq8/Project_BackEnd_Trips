@@ -35,7 +35,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
        return obj.user.username
     class Meta:
         model = UserProfile
-        fields = ['user','id',"bio",'image',]
+        fields = '__all__'
 
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
