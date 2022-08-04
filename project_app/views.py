@@ -15,6 +15,12 @@ class CreateTripView(CreateAPIView):
 
 class TripListView(ListAPIView):
     queryset = Trip.objects.all()
+    # def get_queryset(Self):
+    #     queryset = Trip.objects.first()
+    #     print(dir(queryset))
+    #     print(queryset.user.username)
+    #     return [queryset]
+        
     serializer_class = TripListSerializer
 
 class TripDetailView(RetrieveAPIView):
@@ -29,6 +35,13 @@ class TripUpdateView(UpdateAPIView):
     lookup_field = 'id'
     lookup_url_kwarg = 'trip_id'
     permission_classes = [IsAuthor,]
+    
+class UserProfileUpdateView(UpdateAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'user_id'
+    permission_classes = [IsAuthor,]
 
     
 class TripDeleteView(DestroyAPIView):
@@ -41,9 +54,13 @@ class TripDeleteView(DestroyAPIView):
 class UsersView(ListAPIView):
     queryset = User.objects.all()
     serializer_class = UsersSerializer
-    # lookup_field = 'user'
-    # lookup_url_kwarg = 'user_id'
+    lookup_field = 'user'
+    lookup_url_kwarg = 'user_id'
 
+
+class UsersProfileView(ListAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
 
 
     

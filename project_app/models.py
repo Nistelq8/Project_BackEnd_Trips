@@ -12,8 +12,8 @@ class Trip(models.Model):
 
 class UserProfile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='media/')
-    bio = models.CharField(max_length=300)
+    image = models.ImageField(upload_to='media/', blank=True)
+    bio = models.CharField(max_length=300,)
     id = models.AutoField(primary_key=True)
 
     def create_profile(sender, instance, created, **kwargs):

@@ -22,16 +22,21 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('create/', views.CreateTripView.as_view(), name='create'),
-    path('profile/<int:user_id>', views.UserProfileView.as_view(), name='profiles'),
-    path('users/',views.UsersView.as_view(), name='all users'),
-    path("token/refresh/", TokenRefreshView.as_view(), name="token-refresh"),
-    path('list/', views.TripListView.as_view(), name='explore'),
-    path('list/<int:trip_id>',views.TripDetailView.as_view(),name='explore each'),
     path('register/',views.UserCreateView.as_view(), name='register'),
     path("login/", TokenObtainPairView.as_view(), name="login"),
-    path('update/<int:trip_id>',views.TripUpdateView.as_view(), name='update'),
-    path('delete/<int:trip_id>',views.TripDeleteView.as_view(), name='delete'),
+    path('create/', views.CreateTripView.as_view(), name='create'),
+    path('update/<int:trip_id>/',views.TripUpdateView.as_view(), name='update'),
+    path('delete/<int:trip_id>/',views.TripDeleteView.as_view(), name='delete'),
+    path('list/', views.TripListView.as_view(), name='explore'),
+    path('list/<int:trip_id>/',views.TripDetailView.as_view(),name='explore each'),
+    path('profile/',views.UsersProfileView.as_view(), name='all users'),
+    path('profile/<int:user_id>/', views.UserProfileView.as_view(), name='profiles'),
+    path('profile/<int:user_id>/update/', views.UserProfileUpdateView.as_view(), name='update profiles'),
+    path('users/',views.UsersView.as_view(), name='all users'),
+    path("token/refresh/", TokenRefreshView.as_view(), name="token-refresh"),
+
+
+
     
     
 ]
